@@ -21,16 +21,27 @@
 <script> 
     const socket = io();
 
+    const  name = prompt("Nhập tên của bạn")
     const chatForm = document.querySelector('#chat-form');
     const chatMes = document.querySelector('#chat-mes');
 
     chatForm.addEventListener('submit', (e) => {
         e.preventDefault();
 
-        const message = chatMes.nodeValue
+        const message = chatMes.value
         socket.emit('on-chat',{
+            name,
             message:message
         });
+        chatMes.value = ''
+    })
+
+    const messages = document.querySelector('#messages');
+    socket.on('user-chat', (message) => {
+        const chatItem = document.createElement('li');
+        chatItem.textContent = `${message.name}:${message.message}`;
+
+        messages.appendChild(chatItem);
     })
 </script>
 </html>

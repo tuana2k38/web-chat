@@ -16,6 +16,9 @@ app.get('/', (req, res) => {
 
 io.on('connection',(socket)=>{
     console.log('user connected')
+    socket.on('on-chat', data => {
+        io.emit('user-chat', data) 
+    })
 })
 server.listen(3000,() => {
     console.log('listen on port 3000')

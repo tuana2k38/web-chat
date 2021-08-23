@@ -5,6 +5,15 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Chat and view Trading</title>
+
+    <style>
+        .up{
+            color: green;
+        }
+        .down{
+            color: red;
+        }
+    </style>
 </head>
 <body>
     <h1> App chat </h1>
@@ -15,6 +24,7 @@
         <input type="text" id="chat-mes">
         <button id="send-chat">Gửi</button>
     </form>
+    <span id="bit-price"></span>
 </body>
 
 <script src="/socket.io/socket.io.js"></script>
@@ -42,6 +52,21 @@
         chatItem.textContent = `${message.name}:${message.message}`;
 
         messages.appendChild(chatItem);
+    })
+
+    const priceSpan = document.querySelector('#bit-price');
+    let lastPrice = 0;
+    socket.on('bitcoin-price',(data)=>{
+        const{
+            price
+        }=data
+        if(price>lastPrice){
+            priceSpan.className='up'
+        }else{
+            priceSpan.className='down'
+        }
+        lastPrice=price
+        priceSpan.textContent=`${price} USD`;
     })
 </script>
 </html>
